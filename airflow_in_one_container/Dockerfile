@@ -16,6 +16,10 @@ RUN pip install --no-cache-dir --user -r /requirements.txt
 
 RUN chmod +x setup.sh
 
+RUN mkdir -p /root/airflow/dags
+
+RUN mkdir -p /root/airflow/plugins
+
 CMD [ "bash", "setup.sh"]
 
 EXPOSE 8080

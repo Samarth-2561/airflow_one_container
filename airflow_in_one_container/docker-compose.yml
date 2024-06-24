@@ -2,8 +2,26 @@ name: airflow
 
 services:
   airflow:
-    ports:
-      - "127.0.0.1:8080:8080"
-    build: .
+    platform: linux/amd64
+    image: samarthnaphade/airflow_one_container_image:v3
+    # In order to add custom dependencies or upgrade provider packages you can use your extended image.
+    # and uncomment the "build" line below, add the python dependency in the requirements.txt, Then run `docker-compose build` to build the images.
+    # after creating the build update the image tab.
+    # build: .
     environment:
-      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session"
+    container_name: airflow
+    restart: always
+    ports:
+      - "8080:8080"
+    volumes:
+      - type: bind
+        source: ./dags
+        target: /root/airflow/dags
+      - type: bind
+        source: ./logs
+        target: /root/airflow/logs
+      - type: bind
+        source: ./plugins
+        target: /root/airflow/plugins
